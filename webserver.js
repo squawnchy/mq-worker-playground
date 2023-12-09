@@ -2,7 +2,8 @@ const WebSocket = require('ws');
 const amqp = require('amqplib');
 const logWithTimestamp = require('./logWithTimestamp');
 
-const wss = new WebSocket.Server({ port: 9001 });
+const PORT = 9001 || process.env.PORT;
+const wss = new WebSocket.Server({ port: PORT });
 const RABBITMQ_SERVER = 'amqp://localhost';
 const REQUEST_QUEUE = 'word_request_queue';
 const RESPONSE_QUEUE = 'word_response_queue';
@@ -45,4 +46,4 @@ wss.on('connection', (ws) => {
     });
 });
 
-console.log('WebSocket server started on ws://localhost:9001');
+logWithTimestamp(`Websocket server started on port ${PORT}`, '34');
