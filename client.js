@@ -12,7 +12,7 @@ function logWithTimestamp(message, colorCode = '') {
 
 ws.on('open', function open() {
     const word = process.argv[2];
-    logWithTimestamp(`Sending: ${word}`, '34'); // Blau für sendende Nachrichten
+    logWithTimestamp(`Sending: ${word}`, '34'); // blue for sent messages
     ws.send(word);
 });
 
@@ -23,15 +23,15 @@ ws.on('message', function incoming(data) {
     const isFinished = response.message === 'FINISHED';
 
     if (isReceived) {
-        logWithTimestamp(`Received acknowledgement: ${JSON.stringify(response)}`, '33'); // Gelb für Empfangsbestätigungen
+        logWithTimestamp(`Received acknowledgement: ${JSON.stringify(response)}`, '33'); // yellow for received messages
         return;
     }
 
     if (isFinished) {
-        logWithTimestamp(`Processing finished: ${JSON.stringify(response)}`, '32'); // Grün für abgeschlossene Verarbeitung
+        logWithTimestamp(`Processing finished: ${JSON.stringify(response)}`, '32'); // green for finished messages
         process.exit(0);
     }
 
-    logWithTimestamp(`Unexpected message received: ${data}`, '31'); // Rot für unerwartete Nachrichten
+    logWithTimestamp(`Unexpected message received: ${data}`, '31'); // red for unexpected messages
     process.exit(1);
 });
