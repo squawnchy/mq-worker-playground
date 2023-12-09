@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const amqp = require('amqplib');
+const { v4 } = require('uuid');
 const logWithTimestamp = require('./logWithTimestamp');
 
 const PORT = 9001 || process.env.PORT;
@@ -37,7 +38,7 @@ connectToRabbitMQ().then(ch => {
 wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         const messageString = message.toString();
-        const correlationId = (Math.random() * 1000000000000).toString();
+        const correlationId = v4();
         ws.correlationId = correlationId; // save correlationId on the WebSocket object
         logWithTimestamp(`Sending to queue: ${JSON.stringify({ message: messageString, correlationId })}`, '34');
         channel.sendToQueue(REQUEST_QUEUE, Buffer.from(message), { correlationId, replyTo: RESPONSE_QUEUE });
