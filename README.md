@@ -101,9 +101,9 @@ Please ensure you have the following dependencies installed on your system:
 
 `- ℹ️ Node.js`
 
-`- ℹ️  npm`
+`- ℹ️ npm`
 
-`- ℹ️  Docker`
+`- ℹ️ Docker`
 
 ### 🔧 Installation
 
@@ -155,7 +155,8 @@ To start the clients, run the following command:
 
 > - [X] `ℹ️  Task 1: Implement initial playground setup`
 > - [ ] `ℹ️  Task 2: Implement monitoring and logging`
-> - [ ] `ℹ️ ...`
+> - [ ] `ℹ️  Task 3: Implement testing`
+> - [ ] `ℹ️  Task 4: Implement security measures`
 
 
 ---
