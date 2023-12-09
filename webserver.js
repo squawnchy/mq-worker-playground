@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const amqp = require('amqplib');
+const logWithTimestamp = require('./logWithTimestamp');
 
 const wss = new WebSocket.Server({ port: 9001 });
 const RABBITMQ_SERVER = 'amqp://localhost';
@@ -24,7 +25,7 @@ connectToRabbitMQ().then(ch => {
             if (client.readyState === WebSocket.OPEN && client.correlationId === msg.properties.correlationId) {
                 const responseFromQueue = JSON.parse(msg.content.toString());
                 const responseForClient = { message: 'FINISHED', correlationId: msg.properties.correlationId, ...responseFromQueue };
-                console.log('Sending to client: %s', responseForClient);
+                logWithTimestamp(`Sending to client: ${JSON.stringify(responseForClient)}`, '32');
                 client.send(JSON.stringify(responseForClient));
                 channel.ack(msg);
             }
@@ -35,9 +36,9 @@ connectToRabbitMQ().then(ch => {
 wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         const messageString = message.toString();
-        const correlationId = Math.random().toString();
+        const correlationId = (Math.random() * 1000000000000).toString();
         ws.correlationId = correlationId; // save correlationId on the WebSocket object
-        console.log('Sending to queue: %s', { message: messageString, correlationId });
+        logWithTimestamp(`Sending to queue: ${JSON.stringify({ message: messageString, correlationId })}`, '34');
         channel.sendToQueue(REQUEST_QUEUE, Buffer.from(message), { correlationId, replyTo: RESPONSE_QUEUE });
         const initialResponse = { message: 'RECEIVED', correlationId, requestedWord: messageString };
         ws.send(JSON.stringify(initialResponse));
