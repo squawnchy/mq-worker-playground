@@ -99,11 +99,11 @@ The mq-worker-playground repository contains a highly efficient demonstration ap
 
 Please ensure you have the following dependencies installed on your system:
 
-`- ℹ️ Dependency 1`
+`- ℹ️ Node.js`
 
-`- ℹ️ Dependency 2`
+`- ℹ️  npm`
 
-`- ℹ️ ...`
+`- ℹ️  Docker`
 
 ### 🔧 Installation
 
