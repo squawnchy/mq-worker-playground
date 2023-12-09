@@ -27,7 +27,6 @@
 - [🚀 Getting Started](#-getting-started)
     - [🔧 Installation](#-installation)
     - [🤖 Running mq-worker-playground](#-running-mq-worker-playground)
-    - [🧪 Tests](#-tests)
 - [🛣 Roadmap](#-roadmap)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
@@ -125,16 +124,31 @@ npm install
 
 ### 🤖 Running mq-worker-playground
 
+To run the mq-worker-playground application, you need to start the server, worker, and client processes. The server and worker processes can be started in any order, but the client processes must be started last. Also you need a RabbitMQ server running on localhost:5672.
+
+You can start a docker container with RabbitMQ server and management console using the following command:
+
 ```sh
-node app.js
+docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
-### 🧪 Tests
+To start the server, run the following command:
+
 ```sh
-npm test
+node webserver.js
 ```
 
----
+To start the worker, run the following command:
+
+```sh
+node worker.js
+```
+
+To start the clients, run the following command:
+
+```sh
+./run_clients.sh <number of clients>
+```
 
 
 ## 🛣 Project Roadmap
@@ -196,7 +210,7 @@ This project is protected under the [GNU General Public License v3.0](https://gi
 
 ## 👏 Acknowledgments
 
-- List any resources, contributors, inspiration, etc. here.
+- [**SQUAWNCHY**](https://github.com/squawnchy) - *Project Owner & Developer*
 
 [**Return**](#Top)
 
