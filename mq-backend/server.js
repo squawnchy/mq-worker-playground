@@ -36,10 +36,10 @@ connectToRabbitMQ().then(ch => {
 });
 
 wss.on('connection', (ws) => {
+    const correlationId = v4();
+    ws.correlationId = correlationId; // save correlationId on the WebSocket object
     ws.on('message', (message) => {
         const messageString = message.toString();
-        const correlationId = v4();
-        ws.correlationId = correlationId; // save correlationId on the WebSocket object
         logWithTimestamp(`Sending to queue: ${JSON.stringify({ message: messageString, correlationId })}`, '34');
         channel.sendToQueue(REQUEST_QUEUE, Buffer.from(message), { correlationId, replyTo: RESPONSE_QUEUE });
         const initialResponse = { message: 'RECEIVED', correlationId, requestedWord: messageString };
