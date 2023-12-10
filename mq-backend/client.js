@@ -21,9 +21,11 @@ ws.on('message', function incoming(data) {
 
     if (isFinished) {
         logWithTimestamp(`Processing finished: ${JSON.stringify(response)}`, '32'); // green for finished messages
+        ws.close();
         process.exit(0);
     }
 
     logWithTimestamp(`Unexpected message received: ${data}`, '31'); // red for unexpected messages
+    ws.close();
     process.exit(1);
 });

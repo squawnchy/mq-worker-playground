@@ -18,6 +18,21 @@ const responseTimesHistogram = new promClient.Histogram({
     buckets: [0.1, 0.5, 1, 2, 5, 10]
 });
 
+const sentMessagesCounter = new Counter({
+    name: 'sent_messages_total',
+    help: 'Total number of messages sent by the WebSocket server'
+});
+
+const activeConnectionsGauge = new promClient.Gauge({
+    name: 'active_websocket_connections',
+    help: 'Number of active WebSocket connections'
+});
+
+const errorCounter = new Counter({
+    name: 'errors_total',
+    help: 'Total number of errors occurred'
+});
+
 
 // ENVIRONMENT VARIABLES
 const WEBSERVER_PORT = 9091 || process.env.WEBSERVER_PORT;
@@ -50,6 +65,7 @@ connectToRabbitMQ().then(ch => {
                 const responseForClient = { message: 'FINISHED', correlationId: msg.properties.correlationId, ...responseFromQueue };
                 logWithTimestamp(`Sending to client: ${JSON.stringify(responseForClient)}`, '32');
                 client.send(JSON.stringify(responseForClient));
+                sentMessagesCounter.inc();
                 channel.ack(msg);
             }
         });
@@ -60,6 +76,7 @@ connectToRabbitMQ().then(ch => {
 wss.on('connection', (ws) => {
     const correlationId = v4();
     ws.correlationId = correlationId; // save correlationId on the WebSocket object
+    activeConnectionsGauge.inc();
     ws.on('message', (message) => {
         const start = process.hrtime();
         receivedMessagesCounter.inc();
@@ -71,14 +88,27 @@ wss.on('connection', (ws) => {
         ws.send(JSON.stringify(initialResponse));
         const elapsed = process.hrtime(start);
         const elapsedSeconds = elapsed[0] + elapsed[1] / 1e9;
-        console.log('elapsedSeconds', elapsedSeconds);
         responseTimesHistogram.observe(elapsedSeconds);
     });
+    ws.on('close', () => {
+        activeConnectionsGauge.dec();
+    });
+});
+
+
+wss.on('error', (error) => {
+    errorCounter.inc();
+    console.error(error);
 });
 
 logWithTimestamp(`Websocket server started on port ${WEBSOCKET_PORT}`, '34');
 
 const app = express();
+
+app.use((req, res, next) => {
+    logWithTimestamp(`${req.method} ${req.url}`, '34');
+    next();
+});
 
 app.get('/metrics', async (req, res) => {
     res.set('Content-Type', promClient.register.contentType);
