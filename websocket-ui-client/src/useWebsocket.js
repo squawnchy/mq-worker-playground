@@ -6,7 +6,19 @@ const useWebSocket = (url) => {
     const [response, setResponse] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [latestMessage, setLatestMessage] = useState(null);
+    const [matchingResponse, setMatchingResponse] = useState(null);
+
     useEffect(() => {
+        if (response && response.word === latestMessage) {
+            setMatchingResponse(response);
+            setIsLoading(false);
+        }
+    }, [response, latestMessage, setMatchingResponse, setIsLoading]);
+
+
+    useEffect(() => {
+        console.log('Connecting to: ', url);
         socket.current = new WebSocket(url);
 
         socket.current.onopen = () => console.log('WebSocket Connected');
@@ -14,14 +26,6 @@ const useWebSocket = (url) => {
             const response = JSON.parse(event.data);
             console.log('WebSocket Message Received:', response);
             setResponse(response);
-            if (response.message === 'RECEIVED') {
-                setIsLoading(true);
-                return;
-            }
-            if (response.message === 'FINISHED') {
-                setIsLoading(false);
-                return;
-            }
         };
         socket.current.onerror = (error) => console.error('WebSocket Error:', error);
         socket.current.onclose = () => console.log('WebSocket Disconnected');
@@ -34,10 +38,12 @@ const useWebSocket = (url) => {
     const sendMessage = useCallback((message) => {
         if (socket.current && socket.current.readyState === WebSocket.OPEN) {
             socket.current.send(message);
+            setLatestMessage(message);
+            setIsLoading(true);
         }
-    }, []);
+    }, [setLatestMessage, setIsLoading]);
 
-    return { response, sendMessage, isLoading };
+    return { response: matchingResponse, sendMessage, isLoading };
 };
 
 export default useWebSocket;
