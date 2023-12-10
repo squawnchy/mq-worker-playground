@@ -94,23 +94,15 @@
             },
             "fieldConfig": {
                 "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "fieldMinMax": false,
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "scaleDistribution": {
+                            "type": "linear"
+                        }
                     }
                 },
                 "overrides": []
@@ -123,20 +115,37 @@
             },
             "id": 5,
             "options": {
-                "displayMode": "lcd",
-                "minVizHeight": 10,
-                "minVizWidth": 0,
-                "namePlacement": "auto",
-                "orientation": "vertical",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
+                "calculate": false,
+                "cellGap": 1,
+                "color": {
+                    "exponent": 0.5,
+                    "fill": "dark-orange",
+                    "mode": "scheme",
+                    "reverse": false,
+                    "scale": "exponential",
+                    "scheme": "RdYlBu",
+                    "steps": 64
                 },
-                "showUnfilled": true,
-                "valueMode": "color"
+                "exemplars": {
+                    "color": "rgba(255,0,255,0.7)"
+                },
+                "filterValues": {
+                    "le": 1e-9
+                },
+                "legend": {
+                    "show": true
+                },
+                "rowsFrame": {
+                    "layout": "auto"
+                },
+                "tooltip": {
+                    "show": true,
+                    "yHistogram": false
+                },
+                "yAxis": {
+                    "axisPlacement": "left",
+                    "reverse": false
+                }
             },
             "pluginVersion": "10.2.2",
             "targets": [
@@ -146,15 +155,28 @@
                         "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(active_websocket_connection_durations_histogram_bucket[30m])) by (le)",
+                    "expr": "sum(rate(active_websocket_connection_durations_histogram_bucket[$__range])) by (le)",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
                 }
             ],
-            "title": "Verteilung der Sitzungsdauer über die letzten 30 Minuten",
-            "type": "bargauge"
+            "title": "Verteilung der Sitzungsdauer",
+            "transformations": [
+                {
+                    "id": "sortBy",
+                    "options": {
+                        "fields": {},
+                        "sort": [
+                            {
+                                "field": "0.5"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "type": "heatmap"
         },
         {
             "datasource": {
@@ -493,6 +515,6 @@
     "timezone": "",
     "title": "Websocket-Server",
     "uid": "f9cc785b-ac8a-4c1a-833f-3692d4e6ed34",
-    "version": 6,
+    "version": 7,
     "weekStart": ""
 }
