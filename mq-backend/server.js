@@ -78,6 +78,7 @@ wss.on('connection', (ws) => {
     ws.correlationId = correlationId; // save correlationId on the WebSocket object
     activeConnectionsGauge.inc();
     ws.on('message', (message) => {
+        logWithTimestamp(`Received from client: ${message}`, '33');
         const start = process.hrtime();
         receivedMessagesCounter.inc();
         const messageString = message.toString();
