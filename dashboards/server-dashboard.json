@@ -155,7 +155,7 @@
                         "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(active_websocket_connection_durations_histogram_bucket[$__range])) by (le)",
+                    "expr": "sum(rate(active_websocket_connection_durations_histogram_bucket[5m])) by (le)",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
@@ -508,13 +508,13 @@
         "list": []
     },
     "time": {
-        "from": "now-15m",
-        "to": "now"
+        "from": "2023-12-10T16:16:34.000Z",
+        "to": "2023-12-10T18:02:30.000Z"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Websocket-Server",
     "uid": "f9cc785b-ac8a-4c1a-833f-3692d4e6ed34",
-    "version": 7,
+    "version": 8,
     "weekStart": ""
 }
