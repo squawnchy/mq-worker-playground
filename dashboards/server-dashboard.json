@@ -84,7 +84,7 @@
                     "refId": "A"
                 }
             ],
-            "title": "Durchschnittliche Sitzungsdauer",
+            "title": "Average Sessionduration",
             "type": "stat"
         },
         {
@@ -162,7 +162,7 @@
                     "refId": "A"
                 }
             ],
-            "title": "Verteilung der Sitzungsdauer",
+            "title": "Sessionduration Distribution",
             "transformations": [
                 {
                     "id": "sortBy",
@@ -299,7 +299,7 @@
                     "useBackend": false
                 }
             ],
-            "title": "Aktive Websocket Verbindungen",
+            "title": "Active Websocket Connections",
             "type": "timeseries"
         },
         {
@@ -466,6 +466,101 @@
                 "x": 0,
                 "y": 22
             },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
+                    },
+                    "editorMode": "code",
+                    "expr": "active_workers",
+                    "instant": false,
+                    "legendFormat": "__auto",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Active Workers",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 29
+            },
             "id": 1,
             "options": {
                 "legend": {
@@ -501,20 +596,20 @@
             "type": "timeseries"
         }
     ],
-    "refresh": false,
+    "refresh": "auto",
     "schemaVersion": 38,
     "tags": [],
     "templating": {
         "list": []
     },
     "time": {
-        "from": "2023-12-10T16:16:34.000Z",
-        "to": "2023-12-10T18:02:30.000Z"
+        "from": "now-1h",
+        "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Websocket-Server",
     "uid": "f9cc785b-ac8a-4c1a-833f-3692d4e6ed34",
-    "version": 8,
+    "version": 9,
     "weekStart": ""
 }

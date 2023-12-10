@@ -27,6 +27,8 @@ async function startWorker() {
     const channel = await connection.createChannel();
     channel.prefetch(1);
 
+    await fetch('http://localhost:9091/register-worker', { method: 'POST' });
+
     await channel.assertQueue(REQUEST_QUEUE);
     await channel.assertQueue(RESPONSE_QUEUE);
 
@@ -40,5 +42,11 @@ async function startWorker() {
         channel.ack(msg);
     });
 }
+
+// unregister worker on exit
+process.on('SIGINT', async () => {
+    await fetch('http://localhost:9091/unregister-worker', { method: 'POST' });
+    process.exit();
+});
 
 startWorker().catch(console.error);

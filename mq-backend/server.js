@@ -28,6 +28,11 @@ const activeConnectionsGauge = new promClient.Gauge({
     help: 'Number of active WebSocket connections'
 });
 
+const activeWorkersGauge = new promClient.Gauge({
+    name: 'active_workers',
+    help: 'Number of active workers'
+});
+
 const activeConnectionDurationsHistogram = new promClient.Histogram({
     name: 'active_websocket_connection_durations_histogram',
     help: 'Histogram of active WebSocket connection durations',
@@ -126,10 +131,21 @@ app.use((req, res, next) => {
     next();
 });
 
+app.post('/register-worker', (req, res) => {
+    activeWorkersGauge.inc();
+    res.sendStatus(200);
+});
+
+app.post('/unregister-worker', (req, res) => {
+    activeWorkersGauge.dec();
+    res.sendStatus(200);
+});
+
 app.get('/metrics', async (req, res) => {
     res.set('Content-Type', promClient.register.contentType);
     res.end(await promClient.register.metrics());
 });
+
 
 app.listen(WEBSERVER_PORT, () => {
     logWithTimestamp(`Prometheus metrics available at http://localhost:${WEBSERVER_PORT}/metrics`, '34');
