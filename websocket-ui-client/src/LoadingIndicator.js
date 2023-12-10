@@ -3,8 +3,8 @@ const LoadingIndicator = () => {
         border: "5px solid #f3f3f3", /* Light grey */
         borderTop: "5px solid #3498db", /* Blue */
         borderRadius: "50%",
-        width: "40px",
-        height: "40px",
+        width: "10px",
+        height: "10px",
         animation: "spin 2s linear infinite"
     };
 
