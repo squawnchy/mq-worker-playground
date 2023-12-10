@@ -43,6 +43,7 @@ wss.on('connection', (ws) => {
         logWithTimestamp(`Sending to queue: ${JSON.stringify({ message: messageString, correlationId })}`, '34');
         channel.sendToQueue(REQUEST_QUEUE, Buffer.from(message), { correlationId, replyTo: RESPONSE_QUEUE });
         const initialResponse = { message: 'RECEIVED', correlationId, requestedWord: messageString };
+        logWithTimestamp(`Sending to client: ${JSON.stringify(initialResponse)}`, '33');
         ws.send(JSON.stringify(initialResponse));
     });
 });
