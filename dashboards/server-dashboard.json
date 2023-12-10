@@ -29,6 +29,71 @@
             },
             "fieldConfig": {
                 "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 4,
+                "x": 0,
+                "y": 0
+            },
+            "id": 4,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
+                    },
+                    "editorMode": "code",
+                    "expr": "rate(active_websocket_connection_durations_histogram_sum[5m]) / rate(active_websocket_connection_durations_histogram_count[5m])",
+                    "instant": false,
+                    "legendFormat": "__auto",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Durchschnittliche Sitzungsdauer",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
+            },
+            "fieldConfig": {
+                "defaults": {
                     "color": {
                         "mode": "palette-classic"
                     },
@@ -83,9 +148,9 @@
             },
             "gridPos": {
                 "h": 7,
-                "w": 12,
+                "w": 24,
                 "x": 0,
-                "y": 0
+                "y": 8
             },
             "id": 3,
             "options": {
@@ -182,9 +247,9 @@
             },
             "gridPos": {
                 "h": 7,
-                "w": 12,
+                "w": 24,
                 "x": 0,
-                "y": 7
+                "y": 15
             },
             "id": 2,
             "options": {
@@ -281,9 +346,9 @@
             },
             "gridPos": {
                 "h": 7,
-                "w": 12,
+                "w": 24,
                 "x": 0,
-                "y": 14
+                "y": 22
             },
             "id": 1,
             "options": {
@@ -327,13 +392,13 @@
         "list": []
     },
     "time": {
-        "from": "now-5m",
+        "from": "now-10m",
         "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Websocket-Server",
     "uid": "f9cc785b-ac8a-4c1a-833f-3692d4e6ed34",
-    "version": 3,
+    "version": 4,
     "weekStart": ""
 }
