@@ -28,6 +28,12 @@ const activeConnectionsGauge = new promClient.Gauge({
     help: 'Number of active WebSocket connections'
 });
 
+const activeConnectionDurationsHistogram = new promClient.Histogram({
+    name: 'active_websocket_connection_durations_histogram',
+    help: 'Histogram of active WebSocket connection durations',
+    buckets: [0.1, 0.5, 1, 2, 5, 10, 30, 60, 120, 300, 600, 1200]
+});
+
 const errorCounter = new Counter({
     name: 'errors_total',
     help: 'Total number of errors occurred'
@@ -75,8 +81,10 @@ connectToRabbitMQ().then(ch => {
 // WEBSOCKET CONSUMER
 wss.on('connection', (ws) => {
     const correlationId = v4();
+    logWithTimestamp(`Client ${correlationId} connected`, '34');
     ws.correlationId = correlationId; // save correlationId on the WebSocket object
     activeConnectionsGauge.inc();
+    const connectionStartTime = process.hrtime();
     ws.on('message', (message) => {
         logWithTimestamp(`Received from client: ${message}`, '33');
         const start = process.hrtime();
@@ -93,6 +101,10 @@ wss.on('connection', (ws) => {
     });
     ws.on('close', () => {
         activeConnectionsGauge.dec();
+        const connectionEndTime = process.hrtime(connectionStartTime);
+        const connectionDuration = connectionEndTime[0] + connectionEndTime[1] / 1e9;
+        activeConnectionDurationsHistogram.observe(connectionDuration);
+        logWithTimestamp(`Client ${correlationId} disconnected`, '34');
     });
 });
 
@@ -107,7 +119,10 @@ logWithTimestamp(`Websocket server started on port ${WEBSOCKET_PORT}`, '34');
 const app = express();
 
 app.use((req, res, next) => {
-    logWithTimestamp(`${req.method} ${req.url}`, '34');
+    logWithTimestamp(`INGOING ${req.method} http://localhost${req.url}`, '34');
+    req.on('end', () => {
+        logWithTimestamp(`OUTGOING ${res.statusCode} http://localhost${req.url}`, '34');
+    });
     next();
 });
 

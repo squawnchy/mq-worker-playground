@@ -4,6 +4,14 @@ const logWithTimestamp = require('./logWithTimestamp');
 
 ws.on('open', function open() {
     const word = process.argv[2];
+    if (!word) {
+        logWithTimestamp('No word provided. Keeping Websocket connection open for 30 seconds', '34'); // red for errors
+        setTimeout(() => {
+            ws.close();
+            process.exit(1);
+        }, 30000);
+        return;
+    }
     logWithTimestamp(`Sending: ${word}`, '34'); // blue for sent messages
     ws.send(word);
 });
