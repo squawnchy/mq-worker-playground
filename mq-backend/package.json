@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:client": "node client.js",
+    "start:server": "node server.js",
+    "start:worker": "node worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
