@@ -77,7 +77,7 @@
                         "uid": "f7bbc061-d64d-4253-8473-820dd579c3a3"
                     },
                     "editorMode": "code",
-                    "expr": "rate(active_websocket_connection_durations_histogram_sum[5m]) / rate(active_websocket_connection_durations_histogram_count[5m])",
+                    "expr": "sum(rate(active_websocket_connection_durations_histogram_sum[$__range])) / sum(rate(active_websocket_connection_durations_histogram_count[$__range]))",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
@@ -95,8 +95,9 @@
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "continuous-GrYlRd"
+                        "mode": "thresholds"
                     },
+                    "fieldMinMax": false,
                     "mappings": [],
                     "thresholds": {
                         "mode": "absolute",
@@ -126,7 +127,7 @@
                 "minVizHeight": 10,
                 "minVizWidth": 0,
                 "namePlacement": "auto",
-                "orientation": "horizontal",
+                "orientation": "vertical",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -485,13 +486,13 @@
         "list": []
     },
     "time": {
-        "from": "now-10m",
+        "from": "now-15m",
         "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Websocket-Server",
     "uid": "f9cc785b-ac8a-4c1a-833f-3692d4e6ed34",
-    "version": 5,
+    "version": 6,
     "weekStart": ""
 }
