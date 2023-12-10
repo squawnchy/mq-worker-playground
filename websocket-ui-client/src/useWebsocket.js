@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 const useWebSocket = (url) => {
     const socket = useRef(null);
     const [response, setResponse] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         socket.current = new WebSocket(url);
@@ -12,11 +13,15 @@ const useWebSocket = (url) => {
         socket.current.onmessage = (event) => {
             const response = JSON.parse(event.data);
             console.log('WebSocket Message Received:', response);
+            setResponse(response);
             if (response.message === 'RECEIVED') {
-                setResponse('LOADING...');
+                setIsLoading(true);
                 return;
             }
-            setResponse(JSON.parse(event.data).pow);
+            if (response.message === 'FINISHED') {
+                setIsLoading(false);
+                return;
+            }
         };
         socket.current.onerror = (error) => console.error('WebSocket Error:', error);
         socket.current.onclose = () => console.log('WebSocket Disconnected');
@@ -32,7 +37,7 @@ const useWebSocket = (url) => {
         }
     }, []);
 
-    return { response, sendMessage };
+    return { response, sendMessage, isLoading };
 };
 
 export default useWebSocket;

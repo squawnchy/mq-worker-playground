@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 
-const InputComponent = ({ onSend }) => {
+const InputComponent = ({ onSend, disabled }) => {
     const [inputValue, setInputValue] = useState('');
 
     // Debounced Send Function
@@ -23,6 +23,7 @@ const InputComponent = ({ onSend }) => {
         <div>
             <input
                 type="text"
+                disabled={disabled}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Enter a number"
